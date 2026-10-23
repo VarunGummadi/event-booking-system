@@ -9,8 +9,6 @@ function Media({
   existingMediaUrls = [],
   setExistingMediaUrls,
   loading,
-  onFinish,
-  type,
 }: EventFormStepProp) {
   // Remove a newly added (local File) item
   const onNewFileRemove = (index: number) => {
@@ -26,9 +24,9 @@ function Media({
     );
   };
 
-  const isLastStep = type === undefined || type === "create"
-    ? false
-    : false; // Media is always step 3, Next goes to Tickets
+  //const isLastStep = type === undefined || type === "create"
+    //? false
+    //: false; // Media is always step 3, Next goes to Tickets
 
   return (
     <div className="flex flex-col gap-5">
