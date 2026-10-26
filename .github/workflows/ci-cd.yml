@@ -26,8 +26,16 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Verify frontend lockfile
+        run: |
+          pwd
+          git rev-parse --short HEAD
+          ls -la client
+          test -f client/package.json
+          test -f client/package-lock.json
+
       - name: Install frontend dependencies
-        working-directory: client
+        working-directory: ./client
         run: npm ci
 
       - name: Build frontend
