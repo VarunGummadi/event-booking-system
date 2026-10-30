@@ -89,4 +89,32 @@ jobs:
             VITE_API_URL=/api
           tags: |
             varungummadi/event-booking-frontend:latest
-            varungummadi/event-booking-frontend:${{ github.sha }}
+            varungammadi/event-booking-frontend:${{ github.sha }}
+
+  deploy:
+    name: Deploy to Docker Desktop Kubernetes
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Kubernetes connection
+        shell: powershell
+        run: |
+          kubectl config current-context
+          kubectl get namespace event-booking
+
+      - name: Deploy backend
+        shell: powershell
+        run: |
+          kubectl set image deployment/backend backend=varungummadi/event-booking-backend:${{ github.sha }} -n event-booking
+          kubectl rollout status deployment/backend -n event-booking --timeout=180s
+
+      - name: Deploy frontend
+        shell: powershell
+        run: |
+          kubectl set image deployment/frontend frontend=varungummadi/event-booking-frontend:${{ github.sha }} -n event-booking
+          kubectl rollout status deployment/frontend -n event-booking --timeout=180s
