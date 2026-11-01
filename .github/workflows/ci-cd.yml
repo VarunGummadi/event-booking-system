@@ -102,19 +102,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify Kubernetes connection
-        shell: powershell
+        shell: cmd
         run: |
           kubectl config current-context
           kubectl get namespace event-booking
 
       - name: Deploy backend
-        shell: powershell
+        shell: cmd
         run: |
           kubectl set image deployment/backend backend=varungummadi/event-booking-backend:${{ github.sha }} -n event-booking
           kubectl rollout status deployment/backend -n event-booking --timeout=180s
 
       - name: Deploy frontend
-        shell: powershell
+        shell: cmd
         run: |
           kubectl set image deployment/frontend frontend=varungummadi/event-booking-frontend:${{ github.sha }} -n event-booking
           kubectl rollout status deployment/frontend -n event-booking --timeout=180s
