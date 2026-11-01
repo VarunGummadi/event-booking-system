@@ -89,7 +89,7 @@ jobs:
             VITE_API_URL=/api
           tags: |
             varungummadi/event-booking-frontend:latest
-            varungammadi/event-booking-frontend:${{ github.sha }}
+            varungummadi/event-booking-frontend:${{ github.sha }}
 
   deploy:
     name: Deploy to Docker Desktop Kubernetes
@@ -118,3 +118,4 @@ jobs:
         run: |
           kubectl set image deployment/frontend frontend=varungummadi/event-booking-frontend:${{ github.sha }} -n event-booking
           kubectl rollout status deployment/frontend -n event-booking --timeout=180s
+
