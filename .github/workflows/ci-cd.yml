@@ -111,7 +111,14 @@ jobs:
         shell: cmd
         run: |
           kubectl set image deployment/backend backend=varungummadi/event-booking-backend:${{ github.sha }} -n event-booking
-          kubectl rollout status deployment/backend -n event-booking --timeout=180s
+          kubectl rollout status deployment/backend -n event-booking --timeout=300s
+      - name: Diagnose backend deployment
+        if: failure()
+        run: |
+          kubectl get pods -n event-booking -o wide
+          kubectl get deployment backend -n event-booking
+          kubectl describe deployment backend -n event-booking
+          kubectl get events -n event-booking --sort-by='.lastTimestamp'    
 
       - name: Deploy frontend
         shell: cmd
