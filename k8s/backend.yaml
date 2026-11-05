@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: varungummadi/event-booking-backend:1.0
+          image: varungummadi/event-booking-backend:20b2c6ad28fe4a05a601601098225e96d00edf7a
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
@@ -25,18 +24,27 @@ spec:
                 name: event-booking-config
             - secretRef:
                 name: event-booking-secrets
+          startupProbe:
+            httpGet:
+              path: /
+              port: 5000
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
           readinessProbe:
             httpGet:
               path: /
               port: 5000
-            initialDelaySeconds: 10
-            periodSeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /
               port: 5000
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
           resources:
             requests:
               cpu: 100m
